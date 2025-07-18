@@ -116,7 +116,6 @@ cp -r dist/* ../backend/src/main/resources/static/
 
 For a step-by-step installation walkthrough see **docs/setup.md**. To run the
 app automatically on boot refer to **docs/deploy.md**.
-=======
 ### 5. Build and Run with Docker
 An alternative to installing the toolchain locally is to use Docker. The
 provided `Dockerfile` bundles the backend and frontend into a single image.
@@ -128,6 +127,7 @@ docker build -t launch-calculator .
 # Run the application
 docker run -p 8080:8080 launch-calculator
 ```
+See **docs/docker.md** for detailed Docker instructions.
 
 ## 🌍 Core Features
 
