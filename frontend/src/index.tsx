@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import { Viewer } from 'cesium';
 import axios from 'axios';
 
@@ -15,4 +15,7 @@ const App = () => {
   return <div id="cesiumContainer" style={{height: '100vh'}}></div>;
 };
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const rootEl = document.getElementById('root');
+if (rootEl) {
+  ReactDOM.createRoot(rootEl).render(<App />);
+}
