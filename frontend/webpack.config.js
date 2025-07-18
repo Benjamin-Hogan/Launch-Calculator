@@ -13,6 +13,10 @@ module.exports = {
         {
           from: path.resolve(__dirname, 'node_modules/cesium/Build/Cesium'),
           to: 'Cesium'
+        },
+        {
+          from: path.resolve(__dirname, 'public/index.html'),
+          to: 'index.html'
         }
       ]
     })
