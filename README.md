@@ -257,14 +257,13 @@ visibility.elevation.minimum=10
 ```
 
 ### Frontend Configuration
-```typescript
-// src/config/app.ts
-export const APP_CONFIG = {
-  API_BASE_URL: process.env.REACT_APP_API_URL || '/api',
-  CESIUM_ION_TOKEN: 'your-cesium-token',
-  UPDATE_INTERVAL: 30000, // 30 seconds
-  DEFAULT_LOCATION: { lat: 39.7392, lon: -104.9903 }, // Denver
-};
+The Cesium ion access token is provided via the `CESIUM_ION_TOKEN` environment
+variable. Set this before starting the backend so the frontend can load the
+token dynamically:
+
+```bash
+export CESIUM_ION_TOKEN=your-cesium-token
+java -jar backend/target/launch-calculator-0.1.jar
 ```
 
 ## 🔍 Usage Examples
