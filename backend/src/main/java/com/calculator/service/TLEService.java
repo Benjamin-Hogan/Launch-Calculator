@@ -1,7 +1,8 @@
 package com.calculator.service;
 
+import org.orekit.data.DataContext;
 import org.orekit.data.DataProvidersManager;
-import org.orekit.orbits.TLE;
+import org.orekit.propagation.analytical.tle.TLE;
 
 import javax.annotation.PostConstruct;
 import java.io.BufferedReader;
@@ -25,7 +26,7 @@ public class TLEService {
 
     @PostConstruct
     public void init() throws Exception {
-        DataProvidersManager manager = DataProvidersManager.getInstance();
+        DataProvidersManager manager = DataContext.getDefault().getDataProvidersManager();
         manager.addDefaultProviders();
         loadLocalTLE();
     }
