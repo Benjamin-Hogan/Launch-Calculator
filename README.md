@@ -254,3 +254,146 @@ export const APP_CONFIG = {
 
 ### Basic Satellite Tracking
 ```bash
+# Start the application
+java -jar launch-calculator.jar
+
+# Open web interface
+firefox http://localhost:8080
+
+# Input coordinates: 39.7392°N, 104.9903°W
+# View current satellites overhead
+```
+
+### Unknown Object Analysis
+```bash
+# Input observation data:
+# Time: 2025-07-18 21:30:00 UTC
+# Azimuth: 245°
+# Elevation: 35°
+# 
+# System calculates possible orbits
+# Matches against known catalog
+```
+
+## 🚨 Troubleshooting
+
+### Pi Zero W Performance Issues
+```bash
+# Check memory usage
+free -h
+
+# Reduce Java heap size
+java -Xmx128m -jar launch-calculator.jar
+
+# Monitor CPU usage
+htop
+```
+
+### TLE Data Issues
+```bash
+# Manual TLE update
+curl -o celestrak.tle https://celestrak.com/NORAD/elements/active.txt
+
+# Check TLE file format
+head -n 3 celestrak.tle
+```
+
+### Network Connectivity
+```bash
+# Check WiFi connection
+iwconfig wlan0
+
+# Test internet access
+ping google.com
+
+# Check port availability
+netstat -tuln | grep 8080
+```
+
+## 📊 Performance Optimization
+
+### Memory Management
+- Use `-Xmx256m` for Java heap
+- Enable garbage collection logging
+- Cache TLE data efficiently
+- Limit concurrent calculations
+
+### Battery Life
+- Reduce update frequency
+- Implement sleep modes
+- Optimize calculation algorithms
+- Use efficient data structures
+
+## 🔄 Updates and Maintenance
+
+### TLE Data Updates
+```bash
+# Automated daily updates
+echo "0 6 * * * /path/to/update-tle.sh" | crontab -
+
+# Manual update
+curl -o data/tle/active.txt https://celestrak.com/NORAD/elements/active.txt
+```
+
+### System Updates
+```bash
+# Update Pi Zero W system
+sudo apt update && sudo apt upgrade
+
+# Update Java dependencies
+./mvnw clean package
+
+# Update frontend packages
+npm update
+```
+
+## 🎯 Success Metrics
+
+### Minimum Viable Product
+- ✅ Input coordinates and see satellite list
+- ✅ Real-time visibility calculations
+- ✅ Basic web interface
+- ✅ Runs on Pi Zero W
+
+### Stretch Goals
+- ✅ 3D Cesium visualization
+- ✅ Unknown object tracking
+- ✅ Pass predictions
+- ✅ Mobile-responsive design
+
+## 🚀 Next Steps (Phase 2)
+
+### Advanced Features
+- Historical observation tracking
+- Advanced orbit determination algorithms
+- Mobile app wrapper
+- Offline operation mode
+- Enhanced filtering and search
+
+### Hardware Enhancements
+- GPS module integration
+- Real-time clock
+- Environmental sensors
+- External antenna options
+
+## 📞 Support
+
+### Common Issues
+- **Memory errors**: Reduce Java heap size
+- **WiFi problems**: Check network configuration
+- **Slow performance**: Optimize calculation frequency
+- **TLE errors**: Verify internet connection
+
+### Resources
+- [Orekit Documentation](https://www.orekit.org/)
+- [Cesium.js Guide](https://cesium.com/learn/)
+- [Spring Boot Reference](https://spring.io/projects/spring-boot)
+- [Raspberry Pi Documentation](https://www.raspberrypi.org/documentation/)
+
+## 📜 License
+
+MIT License - Feel free to use and modify for your own satellite tracking projects!
+
+---
+
+**Built with ❤️ for amateur astronomers and space enthusiasts**
