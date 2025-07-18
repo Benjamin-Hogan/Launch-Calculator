@@ -87,7 +87,8 @@ git clone <your-repo>
 cd launch-calculator/backend
 
 # Build with Maven
-./mvnw clean package
+./mvnw dependency:go-offline  # download deps while online
+./mvnw -o clean package       # build offline
 
 # Run with limited memory
 java -Xmx256m -jar target/launch-calculator-0.1.jar
@@ -104,7 +105,7 @@ npm install
 npm run build
 
 # Serve from backend static resources
-cp -r build/* ../backend/src/main/resources/static/
+cp -r dist/* ../backend/src/main/resources/static/
 ```
 
 ### 4. Access the Application
@@ -332,7 +333,7 @@ netstat -tuln | grep 8080
 echo "0 6 * * * /path/to/update-tle.sh" | crontab -
 
 # Manual update
-curl -o data/tle/active.txt https://celestrak.com/NORAD/elements/active.txt
+./scripts/update-tle.sh  # requires temporary internet
 ```
 
 ### System Updates
