@@ -113,8 +113,21 @@ cp -r dist/* ../backend/src/main/resources/static/
 - Open browser: `http://192.168.x.x:8080`
 - Input your coordinates and start tracking!
 
+
 For a step-by-step installation walkthrough see **docs/setup.md**. To run the
 app automatically on boot refer to **docs/deploy.md**.
+=======
+### 5. Build and Run with Docker
+An alternative to installing the toolchain locally is to use Docker. The
+provided `Dockerfile` bundles the backend and frontend into a single image.
+
+```bash
+# Build the container image
+docker build -t launch-calculator .
+
+# Run the application
+docker run -p 8080:8080 launch-calculator
+```
 
 ## 🌍 Core Features
 
