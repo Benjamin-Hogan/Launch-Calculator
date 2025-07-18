@@ -113,6 +113,9 @@ cp -r dist/* ../backend/src/main/resources/static/
 - Open browser: `http://192.168.x.x:8080`
 - Input your coordinates and start tracking!
 
+For a step-by-step installation walkthrough see **docs/setup.md**. To run the
+app automatically on boot refer to **docs/deploy.md**.
+
 ## 🌍 Core Features
 
 ### Location Management
@@ -181,9 +184,9 @@ launch-calculator/
 │   ├── package.json
 │   └── public/
 ├── docs/
-│   ├── api.md
 │   ├── setup.md
-│   └── troubleshooting.md
+│   ├── deploy.md
+│   └── (additional docs)
 └── scripts/
     ├── deploy.sh
     └── update-tle.sh
