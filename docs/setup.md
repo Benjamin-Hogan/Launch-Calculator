@@ -15,13 +15,11 @@ This guide walks you through preparing a Raspberry Pi Zero W and installing **La
 2. Run the initial update and install required packages:
    ```bash
    sudo apt update && sudo apt upgrade -y
-   sudo apt install openjdk-11-jdk maven nodejs npm git -y
+   sudo apt install python3 python3-pip git -y
    ```
-3. Verify the installations:
+3. Verify the installation:
    ```bash
-   java -version   # should print an OpenJDK 11 version
-   mvn -version    # should print the Maven version
-   node -v         # should print the Node.js version
+   python3 --version  # should print Python 3
    ```
 
 ## 3. Clone the Repository
@@ -32,39 +30,23 @@ This guide walks you through preparing a Raspberry Pi Zero W and installing **La
    cd launch-calculator
    ```
 
-## 4. Build the Backend
+## 4. Install Python Dependencies
 
-While online, download dependencies and package the application:
+While online, install the required Python packages:
 ```bash
-cd backend
-mvn dependency:go-offline      # fetch Maven dependencies once
-mvn -o clean package           # build using the cached dependencies
+pip3 install -r requirements.txt
 ```
 
-The compiled JAR will appear under `backend/target/`.
+## 5. Test the Application
 
-## 5. Build the Frontend
-
+Start the Flask app on the Pi:
 ```bash
-cd ../frontend
-npm install              # install Node modules
-npm run build            # create production bundle
-cp -r dist/* ../backend/src/main/resources/static/
-```
-
-This copies the built web assets so the Spring Boot app can serve them.
-
-## 6. Test the Application
-
-Start the backend on the Pi:
-```bash
-cd ../backend
-java -Xmx256m -jar target/launch-calculator-0.1.jar
+python3 -m app
 ```
 
 Browse to `http://<pi-address>:8080` from another device on the network. You should see the application UI.
 
-## 7. Updating TLE Data
+## 6. Updating TLE Data
 
 When you have internet connectivity, run the provided script to refresh satellite data:
 ```bash
