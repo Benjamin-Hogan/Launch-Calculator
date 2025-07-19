@@ -2,20 +2,18 @@
 
 This document explains how to run Launch Calculator as a long‑running service on your Raspberry Pi once you have completed the steps in `setup.md`.
 
-## 1. Build Application Artifacts
+## 1. Install Dependencies
 
-From the project root run the deployment script which compiles the backend and bundles the frontend:
+From the project root run the deployment script which installs Python packages:
 ```bash
 ./scripts/deploy.sh
 ```
-
-After it finishes you should have a JAR file at `backend/target/launch-calculator-0.1.jar` and the frontend assets copied into `backend/src/main/resources/static/`.
 
 ## 2. Starting Manually
 
 Test that the application starts correctly:
 ```bash
-java -Xmx256m -jar backend/target/launch-calculator-0.1.jar
+python3 -m app
 ```
 
 Open `http://<pi-address>:8080` in your browser. Press `Ctrl+C` to stop the server.
@@ -34,7 +32,7 @@ After=network.target
 Type=simple
 User=pi
 WorkingDirectory=/home/pi/launch-calculator
-ExecStart=/usr/bin/java -Xmx256m -jar /home/pi/launch-calculator/backend/target/launch-calculator-0.1.jar
+ExecStart=/usr/bin/python3 -m app
 Restart=always
 
 [Install]

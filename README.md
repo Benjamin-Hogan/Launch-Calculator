@@ -6,7 +6,7 @@ A portable astrodynamics calculator built for a Raspberry Pi Zero W in an Altoid
 
 - **Real-time satellite visibility** - See what's overhead right now
 - **Unknown object identification** - Input observations to determine orbits
-- **3D visualization** - Interactive globe showing satellite positions
+- **Web interface** - Simple form to compute visible satellites
 - **Portable operation** - Runs entirely on Pi Zero W with web interface
 - **Field-ready** - Works offline once loaded, battery powered
 
@@ -14,24 +14,23 @@ A portable astrodynamics calculator built for a Raspberry Pi Zero W in an Altoid
 
 ### Day 1: Backend Foundation
 **Morning (4 hours)**
-- Set up Pi Zero W with Java 11
-- Create Spring Boot REST API
+- Set up Pi Zero W with Python 3
+- Create Flask REST API
 - Basic coordinate conversion utilities
 
 **Afternoon (4 hours)**
 - TLE data integration from Celestrak
-- SGP4 satellite propagation
+- SGP4 satellite propagation using `pyorbital`
 - Visibility calculation algorithms
 
-### Day 2: Frontend & Integration
+### Day 2: Web Interface & Integration
 **Morning (4 hours)**
-- React frontend with TypeScript
-- Cesium.js 3D visualization
-- Location input and time controls
+- Lightweight HTML/JS frontend
+- Simple form to request visible satellites
 
 **Afternoon (4 hours)**
 - API integration
-- Satellite display and tracking
+- Testing on the Pi
 - Deploy to Pi Zero W
 
 ## 🛠️ Hardware Requirements
@@ -50,81 +49,37 @@ A portable astrodynamics calculator built for a Raspberry Pi Zero W in an Altoid
 
 ## 💻 Software Stack
 
-### Backend (Java)
+### Backend (Python)
 ```
-Spring Boot 2.7.x
-Java 11 (OpenJDK)
-Orekit (orbital mechanics)
-H2 Database (embedded)
-Maven build system
-```
-
-### Frontend (React)
-```
-React 18 with TypeScript
-Cesium.js (3D visualization)
-Axios (API client)
-Chart.js (2D plots)
-Responsive design
+Flask 2.x
+pyorbital (SGP4 propagation)
 ```
 
 ## 🚀 Quick Start
 
 ### 1. Pi Zero W Setup
 ```bash
-# Flash Raspberry Pi OS Lite to SD card
-# Boot and enable SSH
+# Flash Raspberry Pi OS Lite to SD card and enable SSH
 sudo apt update && sudo apt upgrade -y
-sudo apt install default-jdk nodejs npm git -y
-
-# Verify Java installation
-java -version  # Should show OpenJDK 11
+sudo apt install python3 python3-pip git -y
 ```
 
-### 2. Clone and Build Backend
+### 2. Clone and Run
 ```bash
 git clone <your-repo>
-cd launch-calculator/backend
-
-# Build with Maven
-./mvnw dependency:go-offline  # download deps while online
-./mvnw -o clean package       # build offline
-
-# Run with limited memory
-java -Xmx256m -jar target/launch-calculator-0.1.jar
+cd launch-calculator
+pip3 install -r requirements.txt
+python3 -m app
 ```
 
-### 3. Build and Deploy Frontend
-```bash
-cd ../frontend
-
-# Install dependencies
-npm install
-
-# Build for production
-npm run build
-
-# Serve from backend static resources
-cp -r dist/* ../backend/src/main/resources/static/
-```
-
-### 4. Access the Application
+### 3. Access the Application
 - Connect to Pi Zero W WiFi network
 - Open browser: `http://192.168.x.x:8080`
 - Input your coordinates and start tracking!
 
-
-For a step-by-step installation walkthrough see **docs/setup.md**. To run the
-app automatically on boot refer to **docs/deploy.md**.
-### 5. Build and Run with Docker
-An alternative to installing the toolchain locally is to use Docker. The
-provided `Dockerfile` bundles the backend and frontend into a single image.
-
+### 4. Build and Run with Docker
 ```bash
-# Build the container image
 docker build -t launch-calculator .
-
-# Run the application
 docker run -p 8080:8080 launch-calculator
 ```
 See **docs/docker.md** for detailed Docker instructions.
@@ -150,7 +105,6 @@ See **docs/docker.md** for detailed Docker instructions.
 - **Export results** - TLE format output
 
 ### Visualization
-- **3D globe view** - Cesium.js Earth visualization
 - **Sky map** - 2D azimuth/elevation plot
 - **Ground tracks** - Orbital path overlay
 - **Time controls** - Past/future predictions
@@ -160,49 +114,18 @@ See **docs/docker.md** for detailed Docker instructions.
 ```
 launch-calculator/
 ├── README.md
-├── backend/
-│   ├── src/main/java/com/calculator/
-│   │   ├── LaunchCalculatorApplication.java
-│   │   ├── controller/
-│   │   │   ├── LocationController.java
-│   │   │   ├── SatelliteController.java
-│   │   │   └── ObservationController.java
-│   │   ├── service/
-│   │   │   ├── TLEService.java
-│   │   │   ├── OrbitService.java
-│   │   │   └── VisibilityService.java
-│   │   ├── model/
-│   │   │   ├── Satellite.java
-│   │   │   ├── Location.java
-│   │   │   └── Observation.java
-│   │   └── config/
-│   │       └── WebConfig.java
-│   ├── src/main/resources/
-│   │   ├── application.properties
-│   │   └── static/ (React build output)
-│   └── pom.xml
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── LocationInput.tsx
-│   │   │   ├── SatelliteMap.tsx
-│   │   │   ├── ObservationForm.tsx
-│   │   │   └── SkyView.tsx
-│   │   ├── services/
-│   │   │   ├── api.ts
-│   │   │   └── cesium.ts
-│   │   ├── types/
-│   │   │   └── index.ts
-│   │   └── App.tsx
-│   ├── package.json
-│   └── public/
+├── app/                # Flask application
+│   ├── __init__.py
+│   └── templates/
+├── data/               # TLE files
 ├── docs/
 │   ├── setup.md
 │   ├── deploy.md
-│   └── (additional docs)
-└── scripts/
-    ├── deploy.sh
-    └── update-tle.sh
+│   └── docker.md
+├── scripts/
+│   └── update-tle.sh
+├── requirements.txt
+└── Dockerfile
 ```
 
 ## 🔧 API Endpoints
@@ -256,22 +179,16 @@ orbit.prediction.days=7
 visibility.elevation.minimum=10
 ```
 
-### Frontend Configuration
-The Cesium ion access token is provided via the `CESIUM_ION_TOKEN` environment
-variable. Set this before starting the backend so the frontend can load the
-token dynamically:
-
-```bash
-export CESIUM_ION_TOKEN=your-cesium-token
-java -jar backend/target/launch-calculator-0.1.jar
-```
+### Configuration
+No special configuration is required. Simply ensure `data/tle/active.txt` exists
+or run `scripts/update-tle.sh` while online to download the latest catalog.
 
 ## 🔍 Usage Examples
 
 ### Basic Satellite Tracking
 ```bash
 # Start the application
-java -jar launch-calculator.jar
+python3 -m app
 
 # Open web interface
 firefox http://localhost:8080
@@ -298,8 +215,8 @@ firefox http://localhost:8080
 # Check memory usage
 free -h
 
-# Reduce Java heap size
-java -Xmx128m -jar launch-calculator.jar
+# Reduce Python memory usage
+python3 -m app
 
 # Monitor CPU usage
 htop
@@ -329,8 +246,7 @@ netstat -tuln | grep 8080
 ## 📊 Performance Optimization
 
 ### Memory Management
-- Use `-Xmx256m` for Java heap
-- Enable garbage collection logging
+- Monitor Python memory usage
 - Cache TLE data efficiently
 - Limit concurrent calculations
 
@@ -356,11 +272,8 @@ echo "0 6 * * * /path/to/update-tle.sh" | crontab -
 # Update Pi Zero W system
 sudo apt update && sudo apt upgrade
 
-# Update Java dependencies
-./mvnw clean package
-
-# Update frontend packages
-npm update
+# Update Python dependencies
+pip3 install -r requirements.txt --upgrade
 ```
 
 ## 🎯 Success Metrics

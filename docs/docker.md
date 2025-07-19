@@ -8,7 +8,7 @@ Run the following command from the project root:
 ```bash
 docker build -t launch-calculator .
 ```
-This compiles the frontend and backend and packages them into a single image.
+This installs the Python dependencies and packages the app into a single image.
 
 ## Running the Container
 
@@ -25,11 +25,10 @@ docker run -p 8080:8080 -v $(pwd)/data/tle:/app/data/tle launch-calculator
 
 ## Repository Layout
 
-- `backend/`   – Spring Boot application
-- `frontend/`  – React client
+- `app/`       – Flask application
 - `scripts/`   – Helper scripts (`deploy.sh`, `update-tle.sh`)
 - `docs/`      – Documentation
 
-Use `scripts/deploy.sh` to build the JAR and bundle the frontend without Docker.
+Use `scripts/deploy.sh` to install dependencies without Docker.
 Update TLE data with `scripts/update-tle.sh` when online.
 
