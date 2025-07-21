@@ -26,7 +26,13 @@ function OrbitCalc({goHome}) {
     eccentricity_vec:{label:'\vec{e}',unit:''}
   };
 
-  React.useEffect(() => { if(window.MathJax) window.MathJax.typesetPromise(); }, [results, tab]);
+  React.useEffect(() => {
+    if (window.renderMathInElement) {
+      window.renderMathInElement(document.getElementById('root'), {
+        delimiters: [{left: '\\(', right: '\\)', display: false}],
+      });
+    }
+  }, [results, tab]);
 
   const handleChange = (e) => setInputs({...inputs,[e.target.name]:e.target.value});
 
@@ -96,12 +102,15 @@ function OrbitCalc({goHome}) {
             <table className="table-auto w-full text-sm"><tbody>
               {Object.entries(results).map(([k,v]) => {
                 const info = display[k] || {label:k,unit:''};
-                let val = Array.isArray(v)? v.map(n=>Number(n).toFixed(3)).join(', ') : (info.convert?info.convert(v):v);
+                let val = Array.isArray(v)
+                  ? v.map(n => Number(n).toFixed(3)).join(', ')
+                  : (info.convert ? info.convert(v) : v);
                 const valHtml = Array.isArray(v) ? `\\left[${val}\\right]` : val;
+                const unitHtml = info.unit ? `\\,${info.unit}` : '';
                 return (
                   <tr key={k}>
                     <td className="border border-gray-700 px-2 py-1 font-medium" dangerouslySetInnerHTML={{__html:`\\(${info.label}\\)`}}></td>
-                    <td className="border border-gray-700 px-2 py-1" dangerouslySetInnerHTML={{__html:Array.isArray(v)?`\\(${valHtml}\\)${info.unit?`\\,${info.unit}`:''}`:`${valHtml}${info.unit?` ${info.unit}`:''}`}}></td>
+                    <td className="border border-gray-700 px-2 py-1" dangerouslySetInnerHTML={{__html:`\\(${valHtml}${unitHtml}\\)`}}></td>
                   </tr>
                 );
               })}
@@ -119,7 +128,13 @@ function HohmannCalc({goHome}) {
   const [mu,setMu] = React.useState(398600.4418);
   const [res,setRes] = React.useState(null);
 
-  React.useEffect(() => { if(window.MathJax) window.MathJax.typesetPromise(); }, [res]);
+  React.useEffect(() => {
+    if (window.renderMathInElement) {
+      window.renderMathInElement(document.getElementById('root'), {
+        delimiters: [{left: '\\(', right: '\\)', display: false}],
+      });
+    }
+  }, [res]);
 
   const submit = async () => {
     try {
