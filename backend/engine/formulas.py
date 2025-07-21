@@ -121,3 +121,13 @@ def true_anomaly(e_vec, r, v):
     if np.dot(r, v) < 0:
         nu = 2 * pi - nu
     return nu
+
+
+def hohmann_delta_v(r1, r2, mu):
+    """Return the two burn magnitudes, total \u0394V and transfer time."""
+    dv1 = sqrt(mu / r1) * (sqrt(2 * r2 / (r1 + r2)) - 1)
+    dv2 = sqrt(mu / r2) * (1 - sqrt(2 * r1 / (r1 + r2)))
+    total = abs(dv1) + abs(dv2)
+    a_trans = (r1 + r2) / 2
+    tof = pi * sqrt(a_trans ** 3 / mu)
+    return dv1, dv2, total, tof

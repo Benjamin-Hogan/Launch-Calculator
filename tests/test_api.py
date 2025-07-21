@@ -23,3 +23,12 @@ def test_calculate_elements():
     data = response.json()["results"]
     assert "periapsis" in data
     assert "apoapsis" in data
+
+
+def test_hohmann_endpoint():
+    payload = {"r1": 7000, "r2": 10000, "mu": 398600.4418}
+    response = client.post("/hohmann", json=payload)
+    assert response.status_code == 200
+    data = response.json()
+    assert "total_delta_v" in data
+    assert data["total_delta_v"] > 0

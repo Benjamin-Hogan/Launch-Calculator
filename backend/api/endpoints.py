@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 import numpy as np
-from .models import CalculateRequest, CalculateResponse
-from ..engine import engine, constants
+from .models import CalculateRequest, CalculateResponse, HohmannRequest, HohmannResponse
+from ..engine import engine, constants, formulas
 
 router = APIRouter()
 solver = engine.AstroCalc()
@@ -19,3 +19,14 @@ def calculate(req: CalculateRequest):
         knowns["eccentricity"] = req.e
     kb = solver.solve(**knowns)
     return {"results": kb.as_dict()}
+
+
+@router.post("/hohmann", response_model=HohmannResponse)
+def hohmann(req: HohmannRequest):
+    dv1, dv2, total, tof = formulas.hohmann_delta_v(req.r1, req.r2, req.mu)
+    return {
+        "delta_v1": dv1,
+        "delta_v2": dv2,
+        "total_delta_v": total,
+        "transfer_time": tof,
+    }
