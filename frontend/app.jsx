@@ -6,6 +6,7 @@ function App() {
     mu: 398600.4418
   });
   const [results, setResults] = React.useState(null);
+  const [tab, setTab] = React.useState('visual');
 
   const placeholders = {
     r1: 'r₁ (km)',
@@ -36,7 +37,7 @@ function App() {
     if (window.MathJax) {
       window.MathJax.typesetPromise();
     }
-  }, [results]);
+  }, [results, tab]);
 
   const handleChange = (e) => {
     setInputs({...inputs, [e.target.name]: e.target.value});
@@ -75,9 +76,19 @@ function App() {
       x.push(r * Math.cos(t));
       y.push(r * Math.sin(t));
     }
+    const traces = [{ x, y, mode: 'lines', name: 'Orbit' }];
+    if (data.r) {
+      traces.push({ x: [0, data.r[0]], y: [0, data.r[1]], mode: 'lines+markers', name: 'r' });
+    }
+    if (data.v && data.r) {
+      const scale = a * 0.1;
+      const vx = data.r[0] + data.v[0] * scale;
+      const vy = data.r[1] + data.v[1] * scale;
+      traces.push({ x: [data.r[0], vx], y: [data.r[1], vy], mode: 'lines+markers', name: 'v' });
+    }
     Plotly.newPlot(
       'plot',
-      [{ x, y, mode: 'lines', name: 'Orbit' }],
+      traces,
       {
         title: 'Orbit in orbital plane',
         xaxis: { scaleanchor: 'y', color: '#eee' },
@@ -121,9 +132,20 @@ function App() {
       y.push(R21 * xp + R22 * yp);
       z.push(R31 * xp + R32 * yp);
     }
+    const traces = [{ x, y, z, mode: 'lines', type: 'scatter3d', name: 'Orbit' }];
+    if (data.r) {
+      traces.push({ x: [0, data.r[0]], y: [0, data.r[1]], z: [0, data.r[2]], mode: 'lines+markers', type: 'scatter3d', name: 'r' });
+    }
+    if (data.v && data.r) {
+      const scale = a * 0.1;
+      const vx = data.r[0] + data.v[0] * scale;
+      const vy = data.r[1] + data.v[1] * scale;
+      const vz = data.r[2] + data.v[2] * scale;
+      traces.push({ x: [data.r[0], vx], y: [data.r[1], vy], z: [data.r[2], vz], mode: 'lines+markers', type: 'scatter3d', name: 'v' });
+    }
     Plotly.newPlot(
       'plot3d',
-      [{ x, y, z, mode: 'lines', type: 'scatter3d', name: 'Orbit' }],
+      traces,
       {
         title: 'Orbit in 3D',
         scene: {
@@ -159,20 +181,31 @@ function App() {
       {results && (
         <div className="mt-4">
           <h2 className="text-xl font-semibold mb-2">Results</h2>
-          <div id="plot" className="mb-4" style={{height:'300px'}}></div>
-          <div id="plot3d" className="mb-4" style={{height:'400px'}}></div>
-          <table className="table-auto w-full text-sm"><tbody>
-            {Object.entries(results).map(([k,v]) => {
-              const info = display[k] || {label: k, unit: ''};
-              const val = Array.isArray(v) ? v.join(', ') : (info.convert ? info.convert(v) : v);
-              return (
-                <tr key={k}>
-                  <td className="border border-gray-700 px-2 py-1 font-medium" dangerouslySetInnerHTML={{__html: '$'+info.label+'$'}}></td>
-                  <td className="border border-gray-700 px-2 py-1">{val}{info.unit?` ${info.unit}`:''}</td>
-                </tr>
-              );
-            })}
-          </tbody></table>
+          <div className="flex space-x-2 mb-4">
+            <button onClick={() => setTab('visual')} className={tab==='visual'?'bg-blue-600 text-white px-3 py-1 rounded':'bg-gray-700 px-3 py-1 rounded'}>Visuals</button>
+            <button onClick={() => setTab('table')} className={tab==='table'?'bg-blue-600 text-white px-3 py-1 rounded':'bg-gray-700 px-3 py-1 rounded'}>Table</button>
+          </div>
+          {tab==='visual' && (
+            <>
+              <div id="plot" className="mb-4" style={{height:'300px'}}></div>
+              <div id="plot3d" className="mb-4" style={{height:'400px'}}></div>
+              <p className="text-sm">Visualization showing current radius and velocity vectors at true anomaly position.</p>
+            </>
+          )}
+          {tab==='table' && (
+            <table className="table-auto w-full text-sm"><tbody>
+              {Object.entries(results).map(([k,v]) => {
+                const info = display[k] || {label: k, unit: ''};
+                const val = Array.isArray(v) ? v.join(', ') : (info.convert ? info.convert(v) : v);
+                return (
+                  <tr key={k}>
+                    <td className="border border-gray-700 px-2 py-1 font-medium" dangerouslySetInnerHTML={{__html: '$'+info.label+'$'}}></td>
+                    <td className="border border-gray-700 px-2 py-1">{val}{info.unit?` ${info.unit}`:''}</td>
+                  </tr>
+                );
+              })}
+            </tbody></table>
+          )}
         </div>
       )}
     </div>
