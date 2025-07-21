@@ -1,7 +1,7 @@
 # AstroCalc
 
 
-AstroCalc is an extensible astrodynamics toolkit. A FastAPI backend exposes a calculation engine that infers as many orbital parameters as possible from any known values. A lightweight React frontend is bundled to interact with the API and display visualisations. The engine supports calculations such as inclination, node angles and periapsis/apoapsis distances.
+AstroCalc is an extensible astrodynamics toolkit. A FastAPI backend exposes a calculation engine that infers as many orbital parameters as possible from any known values. A lightweight React frontend is bundled to interact with the API and display visualisations. The engine supports calculations such as inclination, node angles and periapsis/apoapsis distances. The web interface now plots orbits in both 2D and 3D using Plotly and shows results with LaTeX-rendered symbols in a dark themed UI.
 
 
 ## Features
@@ -9,6 +9,7 @@ AstroCalc is an extensible astrodynamics toolkit. A FastAPI backend exposes a ca
 - Vector based computations using NumPy
 - `/calculate` endpoint that accepts position/velocity vectors or orbital elements along with gravitational parameter
 - Returns a dictionary of all derived values including inclination, node angles, periapsis and apoapsis distances
+- React frontend with 2D/3D orbit plots, LaTeX notation and a dark theme
 
 ## Quick Start
 ```bash
