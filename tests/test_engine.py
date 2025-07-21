@@ -6,6 +6,7 @@ import numpy as np
 from pytest import approx
 from backend.engine.engine import AstroCalc
 from backend.engine.constants import EARTH_MU, EARTH_RADIUS
+from backend.engine import formulas
 
 
 def test_basic_solve():
@@ -29,3 +30,11 @@ def test_with_elements():
 
 def test_constants_exposed():
     assert EARTH_RADIUS > 6000
+
+
+def test_hohmann_formula():
+    dv1, dv2, total, tof = formulas.hohmann_delta_v(7000, 10000, EARTH_MU)
+    assert dv1 > 0
+    assert dv2 > 0
+    assert total > abs(dv1)
+    assert tof > 0

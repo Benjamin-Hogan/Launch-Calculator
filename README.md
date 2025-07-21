@@ -9,7 +9,8 @@ AstroCalc is an extensible astrodynamics toolkit. A FastAPI backend exposes a ca
 - Vector based computations using NumPy
 - `/calculate` endpoint that accepts position/velocity vectors or orbital elements along with gravitational parameter
 - Returns a dictionary of all derived values including inclination, node angles, periapsis and apoapsis distances
-- React frontend with 2D/3D orbit plots, LaTeX notation and a dark theme
+- `/hohmann` endpoint computes transfer \u0394V between two circular orbits
+- React frontend with a calculator menu, 2D/3D orbit plots, LaTeX notation and a dark theme
 
 ## Quick Start
 ```bash
