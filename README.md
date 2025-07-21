@@ -1,6 +1,8 @@
 # AstroCalc
 
+
 AstroCalc is an extensible astrodynamics toolkit. A FastAPI backend exposes a calculation engine that infers as many orbital parameters as possible from any known values. A lightweight React frontend is bundled to interact with the API and display visualisations. The engine supports calculations such as inclination, node angles and periapsis/apoapsis distances.
+
 
 ## Features
 - Dependency-aware calculation engine
@@ -30,3 +32,4 @@ docker build -t astrocalc .
 docker run -p 8000:8000 astrocalc
 ```
 Then open `http://localhost:8000` to use the app.
+
