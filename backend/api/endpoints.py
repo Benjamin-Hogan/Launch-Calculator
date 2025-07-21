@@ -13,5 +13,9 @@ def calculate(req: CalculateRequest):
         knowns["r"] = np.array(req.r)
     if req.v is not None:
         knowns["v"] = np.array(req.v)
+    if req.a is not None:
+        knowns["semi_major_axis"] = req.a
+    if req.e is not None:
+        knowns["eccentricity"] = req.e
     kb = solver.solve(**knowns)
     return {"results": kb.as_dict()}

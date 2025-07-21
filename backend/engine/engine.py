@@ -40,6 +40,16 @@ class AstroCalc:
         self.add(["eccentricity_vec"], ["eccentricity"], formulas.eccentricity)
         self.add(["eccentricity"], ["orbit_type"], formulas.orbit_type)
         self.add(["semi_major_axis", "mu"], ["period"], formulas.period)
+        self.add(["semi_major_axis", "mu"], ["mean_motion"], formulas.mean_motion)
+        self.add(["h_mag", "mu"], ["semi_latus_rectum"], formulas.semi_latus_rectum)
+        self.add(["semi_major_axis", "eccentricity"], ["periapsis"], formulas.periapsis_distance)
+        self.add(["semi_major_axis", "eccentricity"], ["apoapsis"], formulas.apoapsis_distance)
+        self.add(["h_vec"], ["node_vec"], formulas.node_vec)
+        self.add(["node_vec"], ["node_mag"], formulas.node_mag)
+        self.add(["h_vec", "h_mag"], ["inclination"], formulas.inclination)
+        self.add(["node_vec"], ["raan"], formulas.raan)
+        self.add(["node_vec", "eccentricity_vec"], ["argument_of_periapsis"], formulas.argument_of_periapsis)
+        self.add(["eccentricity_vec", "r", "v"], ["true_anomaly"], formulas.true_anomaly)
 
     def solve(self, **knowns):
         kb = KnowledgeBase()
