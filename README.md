@@ -84,6 +84,13 @@ docker run -p 8080:8080 launch-calculator
 ```
 See **docs/docker.md** for detailed Docker instructions.
 
+### 5. Run AstroSolver on the Command Line
+```bash
+python -m app --cli --r "7000,0,0" --v "0,7.5,1"
+```
+The CLI resolves all possible orbital parameters from the provided vectors and
+prints how each value was derived.
+
 ## 🌍 Core Features
 
 ### Location Management
