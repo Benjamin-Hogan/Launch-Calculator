@@ -5,7 +5,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 import numpy as np
 from pytest import approx
 from backend.engine.engine import AstroCalc
-from backend.engine.constants import EARTH_MU
+from backend.engine.constants import EARTH_MU, EARTH_RADIUS
 
 
 def test_basic_solve():
@@ -25,3 +25,7 @@ def test_with_elements():
     kb = solver.solve(semi_major_axis=7000, eccentricity=0.01, mu=EARTH_MU)
     values = kb.as_dict()
     assert values["periapsis"] == approx(6930.0, abs=1.0)
+
+
+def test_constants_exposed():
+    assert EARTH_RADIUS > 6000

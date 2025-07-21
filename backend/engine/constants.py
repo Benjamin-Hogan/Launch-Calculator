@@ -1,1 +1,2 @@
 EARTH_MU = 398600.4418  # km^3/s^2
+EARTH_RADIUS = 6378.137  # km
