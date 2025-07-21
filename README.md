@@ -1,6 +1,6 @@
 # AstroCalc
 
-AstroCalc is an extensible astrodynamics toolkit. A FastAPI backend exposes a calculation engine that infers as many orbital parameters as possible from any known values. A React frontend can consume the API to provide an interactive interface (frontend not included here). The engine now supports additional calculations including node angles, inclination and periapsis/apoapsis distances.
+AstroCalc is an extensible astrodynamics toolkit. A FastAPI backend exposes a calculation engine that infers as many orbital parameters as possible from any known values. A lightweight React frontend is bundled to interact with the API and display visualisations. The engine supports calculations such as inclination, node angles and periapsis/apoapsis distances.
 
 ## Features
 - Dependency-aware calculation engine
@@ -13,7 +13,7 @@ AstroCalc is an extensible astrodynamics toolkit. A FastAPI backend exposes a ca
 pip install -r requirements.txt
 uvicorn backend.main:app --reload
 ```
-Send a POST request to `http://localhost:8000/calculate` with JSON body:
+Open `http://localhost:8000` in your browser for the web interface. It sends requests to `/calculate` under the hood. You can also send a POST request manually to `http://localhost:8000/calculate` with JSON body:
 ```json
 {
   "r": [7000, 0, 0],
@@ -22,3 +22,11 @@ Send a POST request to `http://localhost:8000/calculate` with JSON body:
 }
 ```
 The response includes semi-major axis, eccentricity, period and more.
+
+## Docker
+You can build a single image that serves both the backend and frontend:
+```bash
+docker build -t astrocalc .
+docker run -p 8000:8000 astrocalc
+```
+Then open `http://localhost:8000` to use the app.
