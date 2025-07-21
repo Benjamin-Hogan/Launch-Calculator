@@ -18,12 +18,21 @@ function OrbitCalc({goHome}) {
     periapsis:{label:'q',unit:'km'}, apoapsis:{label:'Q',unit:'km'},
     period:{label:'T',unit:'s'}, mean_motion:{label:'n',unit:'rad/s'},
     inclination:{label:'i',unit:'\u00b0',convert:v=>v*180/Math.PI},
-    raan:{label:'\\Omega',unit:'\u00b0',convert:v=>v*180/Math.PI},
-    argument_of_periapsis:{label:'\\omega',unit:'\u00b0',convert:v=>v*180/Math.PI},
-    true_anomaly:{label:'\\nu',unit:'\u00b0',convert:v=>v*180/Math.PI}
+    raan:{label:'\Omega',unit:'\u00b0',convert:v=>v*180/Math.PI},
+    argument_of_periapsis:{label:'\omega',unit:'\u00b0',convert:v=>v*180/Math.PI},
+    true_anomaly:{label:'\nu',unit:'\u00b0',convert:v=>v*180/Math.PI},
+    r:{label:'\vec{r}',unit:'km'}, v:{label:'\vec{v}',unit:'km/s'},
+    h_vec:{label:'\vec{h}',unit:'km^2/s'}, node_vec:{label:'\vec{N}',unit:'km^2/s'},
+    eccentricity_vec:{label:'\vec{e}',unit:''}
   };
 
-  React.useEffect(() => { if(window.MathJax) window.MathJax.typesetPromise(); }, [results, tab]);
+  React.useEffect(() => {
+    if (window.renderMathInElement) {
+      window.renderMathInElement(document.getElementById('root'), {
+        delimiters: [{left: '\\(', right: '\\)', display: false}],
+      });
+    }
+  }, [results, tab]);
 
   const handleChange = (e) => setInputs({...inputs,[e.target.name]:e.target.value});
 
@@ -91,9 +100,20 @@ function OrbitCalc({goHome}) {
           </>)}
           {tab==='table' && (
             <table className="table-auto w-full text-sm"><tbody>
-              {Object.entries(results).map(([k,v]) => { const info=display[k]||{label:k,unit:''}; const val=Array.isArray(v)?v.join(', '):(info.convert?info.convert(v):v); return (
-                <tr key={k}><td className="border border-gray-700 px-2 py-1 font-medium" dangerouslySetInnerHTML={{__html:'$'+info.label+'$'}}></td><td className="border border-gray-700 px-2 py-1">{val}{info.unit?` ${info.unit}`:''}</td></tr>
-              ); })}
+              {Object.entries(results).map(([k,v]) => {
+                const info = display[k] || {label:k,unit:''};
+                let val = Array.isArray(v)
+                  ? v.map(n => Number(n).toFixed(3)).join(', ')
+                  : (info.convert ? info.convert(v) : v);
+                const valHtml = Array.isArray(v) ? `\\left[${val}\\right]` : val;
+                const unitHtml = info.unit ? `\\,${info.unit}` : '';
+                return (
+                  <tr key={k}>
+                    <td className="border border-gray-700 px-2 py-1 font-medium" dangerouslySetInnerHTML={{__html:`\\(${info.label}\\)`}}></td>
+                    <td className="border border-gray-700 px-2 py-1" dangerouslySetInnerHTML={{__html:`\\(${valHtml}${unitHtml}\\)`}}></td>
+                  </tr>
+                );
+              })}
             </tbody></table>
           )}
         </div>
@@ -108,7 +128,13 @@ function HohmannCalc({goHome}) {
   const [mu,setMu] = React.useState(398600.4418);
   const [res,setRes] = React.useState(null);
 
-  React.useEffect(() => { if(window.MathJax) window.MathJax.typesetPromise(); }, [res]);
+  React.useEffect(() => {
+    if (window.renderMathInElement) {
+      window.renderMathInElement(document.getElementById('root'), {
+        delimiters: [{left: '\\(', right: '\\)', display: false}],
+      });
+    }
+  }, [res]);
 
   const submit = async () => {
     try {
