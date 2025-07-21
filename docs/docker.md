@@ -23,6 +23,12 @@ To persist satellite data between runs, mount the `data/tle` directory:
 docker run -p 8080:8080 -v $(pwd)/data/tle:/app/data/tle launch-calculator
 ```
 
+### CLI Usage
+You can also run AstroSolver directly inside the container:
+```bash
+docker run --rm launch-calculator python -m app --cli --r "7000,0,0" --v "0,7.5,1"
+```
+
 ## Repository Layout
 
 - `app/`       – Flask application
